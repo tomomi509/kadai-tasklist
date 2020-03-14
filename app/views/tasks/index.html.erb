@@ -1,9 +1,30 @@
+
+
+<% if logged_in? %>
+<p>ログイン完了ユーザ: <%= current_user.name %></p>
 <h1>タスク一覧</h1>
+      <%#= form_with(model: @task, local: true) do |f| %>
 
-<ul>
-  <% @tasks.each do |task| %>
-    <li><%= link_to task.id, task %> : <%= task.status %>  <%= task.content %></li>
-  <% end %>
-</ul>
+      <%# end %>
+      <div class="container">
+        <ul>
+        <%#= render 'tasks/tasks', tasks: @tasks %>
+        <% @tasks.each do |task| %>
+        <li><%= link_to task.id, task %> : <%= task.status %>  <%= task.content %></li>
+        <% end %>
+        </ul>
+      </div>
+      
+  
+      <%= link_to '新規タスクの投稿', new_task_path %> 
 
-<%= link_to '新規タスクの投稿', new_task_path %>
+  
+<% else %>
+  <div class="center jumbotron">
+    <div class="text-center">
+      <h1>Welcome to the Tasks</h1>
+      <%= link_to 'Sign up now!', signup_path %>
+      <%= link_to 'Login', login_path %>
+    </div>
+  </div>
+<% end %>

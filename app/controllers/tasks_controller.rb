@@ -1,36 +1,35 @@
 class TasksController < ApplicationController
   before_action :require_user_logged_in
-  before_action :correct_user, only: [:destroy,:edit,:show]
+  before_action :correct_user, only: [:destroy,:edit,:show,:update]
     def index
       #session[:user_id] = nil
-      if logged_in?
-        @task = current_user.tasks.build  # form_with 用
+      #if logged_in?
+        #@task = current_user.tasks.build  # form_with 用
         @tasks = current_user.tasks.order(id: :desc).page(params[:page])
-        #@tasks = Task.all
-      end
+      #end
     end
     def show
-    @task = Task.find(params[:id])
+    @task
     end
     def new
     @task = Task.new
     end
     def create
-    @task = current_user.tasks.build(task_params)
+      @task = current_user.tasks.build(task_params)
       if @task.save
       flash[:success] = 'メッセージを投稿しました。'
       redirect_to root_url
       else
       @tasks = current_user.tasks.order(id: :desc).page(params[:page])
       flash.now[:danger] = 'メッセージの投稿に失敗しました。'
-      render 'tasks/index'
+      render :new
       end
     end
     def edit  
-      @task = Task.find(params[:id])
+      @task
     end
     def update
-      @task = Task.find(params[:id])
+      @task
         if @task.update(task_params)
       flash[:success] = 'Task は正常に更新されました'
       redirect_to @task
@@ -47,9 +46,7 @@ class TasksController < ApplicationController
    
      private
      
-  def set_message
-    @task = Task.find(params[:id])
-  end
+
   # Strong Parameter
   def task_params
     params.require(:task).permit(:content, :status)
